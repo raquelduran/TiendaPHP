@@ -103,6 +103,9 @@
 			.footer .container p{
 				margin-top: 	5px;
 			}
+			.footer{
+				margin-top: 5%;
+			}
 			.datos{
 				padding: 	0px;
 				text-align: 	left;
@@ -126,6 +129,9 @@
 			.centrado{
 				margin: auto;
 			}
+			.dcha{
+				text-align: right;
+			}
 		</style>
 </head>
 <body>
@@ -147,7 +153,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li><a href="inicio.html">Inicio</a></li>
-        <li class="active"><a href="index.php">Catálogo</a></li>
+        <li><a href="index.php">Catálogo</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="registro.php">Registro</a></li>
@@ -169,7 +175,7 @@
 					<th>Precio</th>
 					<th>Cantidad</th>
 					<th>Subtotal</th>
-					<th>Cambios</th>
+					<th>Eliminar</th>
 				</tr>
 		<?php
 					$datos=$_SESSION['carrito'];
@@ -187,7 +193,7 @@
 									data-id="<?php echo $datos[$i]['Id'];?>"
 									class="cantidad"></td>
 							<td><span class="subtotal"><?php echo $datos[$i]['Precio']*$datos[$i]['Cantidad'];?>€</span></td>
-							<td><a href="#" class="eliminar" data-id="<?php echo $datos[$i]['Id']?>">Eliminar</a></td>
+							<td style="padding: 0% 3%;"><a href="#" class="eliminar" data-id="<?php echo $datos[$i]['Id']?>" ><i class="fa fa-times" aria-hidden="true"></i></a></td>
 								
 						</tr>
 		<?php
@@ -198,14 +204,14 @@
 					
 				
 			}else{
-				echo '<center><h2>El carrito esta vacio</h2></center>';
+				echo '<center><p style="margin-top:20px;">El carrito esta vacio</p></center>';
 			}
-			echo '<center><h2 id="total">Total: '.$total.'</h2></center>';
+			echo '<center class="dcha"><h2 id="total" >Total: '.$total.'€</h2></center>';
 			if ($total!=0) {
-				echo '<center><a href="./compras.php" class="aceptar">Comprar</a></center>';
+				echo '<center class="dcha"><a href="./compras.php" class="aceptar"><strong>Realizar Pedido</strong></a></center>';
 			}
 		?>
-		<center><a href="./">Ver catálogo</a></center>
+		<center class="dcha"><a href="./">Seguir comprando</a></center>
 	</div>
 	</section>
 	<footer class="footer">
