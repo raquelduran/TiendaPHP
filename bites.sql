@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-02-2017 a las 23:58:25
+-- Tiempo de generación: 02-03-2017 a las 22:42:30
 -- Versión del servidor: 10.1.16-MariaDB
 -- Versión de PHP: 7.0.9
 
@@ -37,6 +37,15 @@ CREATE TABLE `compras` (
   `cantidad` int(4) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `compras`
+--
+
+INSERT INTO `compras` (`Id`, `numeroventa`, `nombre`, `imagen`, `precio`, `cantidad`, `subtotal`) VALUES
+(1, 1, 'Tarta hueso', 'tarta-hueso.jpg', '4.00', 1, '4.00'),
+(2, 1, 'Galletas de carne', 'galletas-carne.jpeg', '1.50', 1, '1.50'),
+(3, 2, 'Bocaditos de higado', 'bocaditos-higado.jpg', '0.90', 1, '0.90');
 
 -- --------------------------------------------------------
 
@@ -82,16 +91,16 @@ CREATE TABLE `usuarios` (
   `Nombre` varchar(30) NOT NULL,
   `Apellido` varchar(50) NOT NULL,
   `Usuario` varchar(20) NOT NULL,
-  `Password` varchar(20) NOT NULL,
-  `Imagen` text NOT NULL
+  `Password` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`Id`, `Nombre`, `Apellido`, `Usuario`, `Password`, `Imagen`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin', 'perfil.jpg');
+INSERT INTO `usuarios` (`Id`, `Nombre`, `Apellido`, `Usuario`, `Password`) VALUES
+(1, 'admin', 'admin', 'admin', 'admin'),
+(4, 'Raquel', 'Fernandez', 'Raquel', '12345');
 
 --
 -- Índices para tablas volcadas
@@ -123,17 +132,17 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -1,3 +1,4 @@
+<!-- BD -PHP ELIM Y MOD PRODUCTOS Y USUARIOS -->
 <?php
 	include"../conexion.php";
 	if($_POST['Caso']=="Eliminar"){

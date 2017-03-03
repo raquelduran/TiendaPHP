@@ -1,7 +1,8 @@
+<!-- BD - CREAR PRODUCTO -->
 <?php
 	include ("../conexion.php");
-	if(!isset($_POST['nombre']) &&  !isset($_POST['descripcion']) && !isset($_POST['precio'])){
-		header("Location: agregarproducto.php");
+	if(!isset($_POST['nombre']) ||  !isset($_POST['descripcion']) || !isset($_POST['precio'])){
+		header("Location: productos.php?error=faltan datos");
 	}else{
 			$allowedExts = array("gif", "jpeg", "jpg", "png");
 			$temp = explode(".", $_FILES["file"]["name"]);
@@ -36,8 +37,7 @@
 							'".$imagen."',
 							'".$precio."')";
 					mysqli_query($con,$Sql)or die(mysqli_error($con));
-					echo "El prodcuto se añadió";
-					header ("Location: agregarproducto.php");
+					header ("Location: productos.php?correcto=1");
 		      }
 		    }
 		  }else{

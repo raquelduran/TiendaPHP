@@ -1,3 +1,4 @@
+// MODIFICAR CANTIDADES CARRITO
 var inicio=function () {
 	$(".cantidad").keyup(function(e){
 		if($(this).val()!=''){
@@ -5,7 +6,8 @@ var inicio=function () {
 				var id=$(this).attr('data-id');
 				var precio=$(this).attr('data-precio');
 				var cantidad=$(this).val();
-				$(this).parent().parent().find('.subtotal').text((precio*cantidad)+'€');
+				var subtotal = (precio*cantidad);
+				$(this).parent().parent().find('.subtotal').text(subtotal+'€');
 				$.post('./js/modificarDatos.php',{
 					Id:id,
 					Precio:precio,

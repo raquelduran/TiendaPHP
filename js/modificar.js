@@ -1,3 +1,5 @@
+// MODIFICAR Y ELIMINAR PRODUCTOS
+
 $(document).ready(function(){
 	$(".eliminar").click(function(){
 		var imagen=$(this).parent('td').parent('tr').find('.imagen').val();

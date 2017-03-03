@@ -3,24 +3,24 @@
 	include './conexion.php';
 	if (isset($_SESSION['carrito'])) {
 		if (isset($_GET['id'])) {
-		$arreglo=$_SESSION['carrito'];
+		$carro=$_SESSION['carrito'];
 		$encontro=false;
 		$numero=0;
-		for ($i=0; $i < count($arreglo) ; $i++) { 
-			if ($arreglo[$i]['Id']==$_GET['id']) {
+		for ($i=0; $i < count($carro) ; $i++) { 
+			if ($carro[$i]['Id']==$_GET['id']) {
 				$encontro=true;
 				$numero=$i;
 			}
 		}
 		if($encontro==true){
-			$arreglo[$numero]['Cantidad']=$arreglo[$numero]['Cantidad']+1;
-			$_SESSION['carrito']=$arreglo;
+			$carro[$numero]['Cantidad']=$carro[$numero]['Cantidad']+1;
+			$_SESSION['carrito']=$carro;
 		}else{
 			$nombre="";
 			$precio=0;
 			$imagen="";
-			$re=mysqli_query($con,"select * from productos where id=".$_GET['id']);
-			while ($f=mysqli_fetch_array($re)) {
+			$resultado=mysqli_query($con,"select * from productos where id=".$_GET['id']);
+			while ($f=mysqli_fetch_array($resultado)) {
 				$nombre=$f['nombre'];
 				$precio=$f['precio'];
 				$imagen=$f['imagenes'];
@@ -30,8 +30,8 @@
 							'Precio'=>$precio,
 							'Imagen'=>$imagen,
 							'Cantidad'=>1);
-			array_push($arreglo, $datosNuevos);
-			$_SESSION['carrito']=$arreglo;
+			array_push($carro, $datosNuevos);
+			$_SESSION['carrito']=$carro;
 		}
 	}
 
@@ -40,18 +40,18 @@
 			$nombre="";
 			$precio=0;
 			$imagen="";
-			$re=mysqli_query($con,"select * from productos where id=".$_GET['id']);
-			while ($f=mysqli_fetch_array($re)) {
+			$resultado=mysqli_query($con,"select * from productos where id=".$_GET['id']);
+			while ($f=mysqli_fetch_array($resultado)) {
 				$nombre=$f['nombre'];
 				$precio=$f['precio'];
 				$imagen=$f['imagenes'];
 			}
-			$arreglo[]=array('Id'=>$_GET['id'],
+			$carro[]=array('Id'=>$_GET['id'],
 							'Nombre'=>$nombre,
 							'Precio'=>$precio,
 							'Imagen'=>$imagen,
 							'Cantidad'=>1);
-			$_SESSION['carrito']=$arreglo;
+			$_SESSION['carrito']=$carro;
 		}
 	}
 ?>
@@ -66,7 +66,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- 	<link rel="icon" href="https://image.flaticon.com/icons/png/512/40/40861.png" sizes="16x16" type="image/png"> -->
-
 		<link href="https://fonts.googleapis.com/css?family=Asset" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="./css/estilos.css">
@@ -77,7 +76,9 @@
 			.navbar.navbar-default{
 				margin-bottom: 0px;
 			}
-			
+			#userNav:hover {
+			background-color: #E95420;
+			}
 			section.carrito{
 				padding: 0% 1%;
 				margin-bottom: 2%;
@@ -156,9 +157,31 @@
         <li><a href="index.php">Catálogo</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="registro.php">Registro</a></li>
-        <li><a href="login.php">Login</a></li>
-        <li class="active"><a href="carrito.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+       <?php
+			if (isset($_SESSION['Usuario'])) {
+				echo "<li><a href='' id='userNav'>".$_SESSION['Usuario'][0]['Usuario']."</a></li>";
+				if ($_SESSION['Usuario'][0]['Usuario'] == 'admin') {
+		?>
+					<li class='dropdown'>
+					  <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><span class='fa fa-cog'></span></a>
+					    <ul class='dropdown-menu' role='menu'>
+					      <li><a href='registro.php'>Usuarios</a></li>
+					      <li><a href='./admin/productos.php'>Productos</a></li>
+					      <li><a href='admin.php'>Pedidos</a></li>
+					    </ul>
+					</li>
+		<?php
+				} else {
+					echo"<li><a href='./login/panelU.php'><i class='fa fa-cog' aria-hidden='true'></i></a></li>";
+				}
+				echo "<li><a href='./login/cerrar.php'>Salir</a></li>";
+			}
+			else{
+				echo "<li><a href='registro.php'>Registro</a></li>";
+				echo "<li><a href='login.php'>Login</a></li>";
+			}
+        ?>
+        <li class="active"><a href="carrito.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

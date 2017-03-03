@@ -1,4 +1,6 @@
+<!-- BD - CREAR USUARIOS -->
 <?php 
+	session_start();
 	include("../conexion.php");
 	if (!isset($_POST['nombre']) ||  !isset($_POST['apellido']) || !isset($_POST['password']) || !isset($_POST['usuario'])) {
 		header("Location: ../registro.php?error=faltan datos");
@@ -13,9 +15,15 @@
 			'".$usuario."',
 			'".$password."')";
 		if (mysqli_query($con,$sql)) {
-		 	header ("Location: ../login.php");
+			if ($_SESSION['Usuario'][0]['Usuario'] == 'admin') {
+				header ("Location: ../registro.php");
+			}
+			else{
+				header ("Location: ../login.php");
+			}
+		 		
 		 }else{
-		 	echo "Error registrando el usuario";
+		 	header ("Location: ../registro.php?con=0");
 		 }
 	}
 ?>

@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Asset" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/estilos.css">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -20,13 +21,15 @@
 		.navbar.navbar-default{
 			margin-bottom: 0px;
 		}
-		
+		#userNav:hover {
+			background-color: #E95420;
+		}
 		section.registro{
 			padding: 0% 1%;
 			margin-bottom: 2%;
 			display: 	block;
 			overflow: hidden;
-			min-height: 	421px;
+			min-height: 450px;
 		}
 		.footer{
 
@@ -46,7 +49,13 @@
 			margin-top: 	5px;
 		}
 		#modificar{
-			<?php if ($_SESSION['Usuario'][0]['Usuario'] != "admin") {echo "display:none;";}?>
+			display: none;
+			<?php if ($_SESSION['Usuario'][0]['Usuario'] == "admin" ) {
+				echo "display:block;";
+			}?>
+		}
+		.table {
+			width: 80%;
 		}
 	</style>
 </head>
@@ -71,9 +80,31 @@
 	        <li ><a href="index.php">Catálogo</a></li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li class="active"><a href="registro.php">Registro</a></li>
-	        <li><a href="login.php">Login</a></li>
-	        <li class="active"><a href="carrito.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+	        <?php
+			if (isset($_SESSION['Usuario'])) {
+				echo "<li><a href='' id='userNav'>".$_SESSION['Usuario'][0]['Usuario']."</a></li>";
+				if ($_SESSION['Usuario'][0]['Usuario'] == 'admin') {
+			?>
+					<li class='dropdown'>
+					  <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><span class='fa fa-cog'></span></a>
+					    <ul class='dropdown-menu' role='menu'>
+					      <li><a href='registro.php'>Usuarios</a></li>
+					      <li><a href='./admin/productos.php'>Productos</a></li>
+					      <li><a href='admin.php'>Pedidos</a></li>
+					    </ul>
+					</li>
+			<?php
+				} else {
+					echo"<li><a href='./login/panelU.php'><i class='fa fa-cog' aria-hidden='true'></i></a></li>";
+				}
+				echo "<li><a href='./login/cerrar.php'>Salir</a></li>";
+			}
+			else{
+				echo "<li><a href='registro.php'>Registro</a></li>";
+				echo "<li><a href='login.php'>Login</a></li>";
+			}
+        	?>
+        	<li class="active"><a href="./carrito.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a></li>
 	      </ul>
 	    </div><!--/.nav-collapse -->
 	  </div>
@@ -81,64 +112,68 @@
 	
 	<section class="registro">
 		<center><h1>Registro de usuarios</h1></center>
-		<form class="col-md-offset-4 col-md-4" action="./registro/altausuario.php" method ="post">
+		<form class="col-xs-offset-4 col-xs-4 col-sm-offset-4 col-sm-4 col-md-offset-4 col-md-4" action="./admin/altausuario.php" method ="post">
 		<?php 
-			if(isset($GET['error'])){
+			if(isset($_GET['error'])){
 				echo "<center>Introduce todos los campos</center>";
 			}
+			elseif (isset($_GET['con'])) {
+				echo "<center>Error en la conexión</center>";
+			}
 		 ?>
-			<fieldset>
+			<fieldset class="form-group">
 				Nombre<br>
-				<input type="text" name="nombre" required>
+				<input type="text" name="nombre" required class="form-control">
 			</fieldset>
-			<fieldset>
+			<fieldset class="form-group">
 				Apellido<br>
-				<input type="text" name="apellido" required>
+				<input type="text" name="apellido" required class="form-control">
 			</fieldset>
-			<fieldset>
+			<fieldset class="form-group">
 				Usuario<br>
-				<input type="text" name="usuario" required>
+				<input type="text" name="usuario" required class="form-control">
 			</fieldset>
-			<fieldset>
+			<fieldset class="form-group">
 				Password<br>
-				<input type="password" name="password" required>
+				<input type="password" name="password" required class="form-control">
 			</fieldset>			
-			<input type="submit" name="accion" value="Enviar" class="aceptar">
+			<input type="submit" name="accion" value="Enviar" class="btn btn-primary aceptar">
 		</form>
 	</section>
 	<div class="clearfix"></div>
 	<section id="modificar">
-		<center><h1>Modificar y/o eliminar usuarios</h1></center>
-		<table class="table" width="100%">
+		<center><h1>Gestión de usuarios</h1></center>
+		<table class="table col-xs-offset-1 col-xs-10 col-sm-offset-1 col-sm-10 col-md-offset-1 col-md-10">
 			<tr>
 				<th>Id</th>
 				<th>Nombre</th>
 				<th>Apellido</th>
 				<th>Usuario</th>
 				<th>Password</th>
-				<th>Eliminar</th>
 				<th>Modificar</th>
+				<th>Eliminar</th>
 			</tr>
 			<?php 
-				$re=mysqli_query($con,"select * from usuarios");
-				while ($row=mysqli_fetch_array($re)) {
+				$datos=mysqli_query($con,"select * from usuarios");
+				while ($fila=mysqli_fetch_array($datos)) {
 					echo '
 					<tr>
 						<td>
-							<input type="hidden" value="'.$row['Id'].'">'.$row['Id'].'
+							<input type="hidden" value="'.$fila['Id'].'">'.$fila['Id'].'
 						</td>
-						<td><input type="text" class="nombre" value="'.$row['Nombre'].'"></td>
-						<td><input type="text" class="apellido" value="'.$row['Apellido'].'"></td>
-						<td><input type="text" class="usuario" value="'.$row['Usuario'].'"></td>
-						<td><input type="text" class="password" value="'.$row['Password'].'"></td>
-						<td><button class="eliminar" data-id="'.$row['Id'].'">Eliminar</button></td>
-						<td><button class="modificar" data-id="'.$row['Id'].'">Modificar</button></td>
+						<td><input type="text" class="nombre form-control" value="'.$fila['Nombre'].'"></td>
+						<td><input type="text" class="apellido form-control" value="'.$fila['Apellido'].'"></td>
+						<td><input type="text" class="usuario form-control" value="'.$fila['Usuario'].'"></td>
+						<td><input type="password" class="password form-control" value="'.$fila['Password'].'"></td>
+						<td><button class="modificar btn btn-primary" data-id="'.$fila['Id'].'">Modificar</button></td>
+						<td><a class="eliminar" data-id="'.$fila['Id'].'"><i class="fa fa-times" aria-hidden="true"></i></a></td>
 					</tr>
 					';
 				}
 			?>
 		</table>	
 	</section>
+	<div class="clearfix"></div>
 <footer class="footer">
 	  <div class="container">
 	    <p><i class="fa fa-paw"></i>&nbsp;&nbsp;Raquel Fernández Durán&nbsp;&nbsp;</p>

@@ -8,7 +8,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- 	<link rel="icon" href="https://image.flaticon.com/icons/png/512/40/40861.png" sizes="16x16" type="image/png"> -->
-	<!-- 	<link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet"> -->
 		<link href="https://fonts.googleapis.com/css?family=Asset" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="./css/estilos.css">
@@ -17,7 +16,9 @@
 			.navbar.navbar-default{
 				margin-bottom: 30px;
 			}
-			
+			#userNav:hover {
+			background-color: #E95420;
+			}
 			section.inicio{
 				padding: 0% 1%;
 				margin-bottom: 2%;
@@ -48,6 +49,10 @@
 		</style>
 </head>
 <body>
+<?php
+	session_start();
+	include 'conexion.php';
+?>
 <header>
 	<div id="img"><img src="./imagenes/banner-animales.png" width="100%"/></div>
 </header>
@@ -65,30 +70,54 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="inicio.html">Inicio</a></li>
+        <li class="active"><a href="inicio.php">Inicio</a></li>
         <li><a href="index.php">Catálogo</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="registro.php">Registro</a></li>
-        <li><a href="login.php">Login</a></li>
-        <li class="active"><a href="carrito.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+       <?php
+			if (isset($_SESSION['Usuario'])) {
+				echo "<li><a href='' id='userNav'>".$_SESSION['Usuario'][0]['Usuario']."</a></li>";
+				if ($_SESSION['Usuario'][0]['Usuario'] == 'admin') {
+		?>
+					<li class='dropdown'>
+					  <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><span class='fa fa-cog'></span></a>
+					    <ul class='dropdown-menu' role='menu'>
+					      <li><a href='registro.php'>Usuarios</a></li>
+					      <li><a href='./admin/productos.php'>Productos</a></li>
+					      <li><a href='admin.php'>Pedidos</a></li>
+					    </ul>
+					</li>
+		<?php
+				} else {
+					echo"<li><a href='./login/panelU.php'><i class='fa fa-cog' aria-hidden='true'></i></a></li>";
+				}
+				echo "<li><a href='./login/cerrar.php'>Salir</a></li>";
+			}
+			else{
+				echo "<li><a href='registro.php'>Registro</a></li>";
+				echo "<li><a href='login.php'>Login</a></li>";
+			}
+        ?>
+        <li class="active"><a href="carrito.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
 </nav>
 	<section class="inicio" >
-	<div class="container">
-	<div class="col-xs-3 col-sm-3 col-md-6">
-		<img src="http://ichef.bbci.co.uk/news/ws/660/amz/worldservice/live/assets/images/2015/11/27/151127162942_gato_624x351_thinkstock_nocredit.jpg">
-	</div>
-	<div class="col-xs-3 col-sm-3 col-md-6 texto">
-	<p>En <strong>Bites</strong> elaboramos nuestros productos para perros y gatos de manera artesanal y con <u>ingredientes naturales.</u></p><br>
-	<p><strong>Nuestro obrador está incluido en el Registro de Establecimientos e Intermediarios para el sector de la alimentación animal.</strong></p>
-	<p>No usamos aditivos, aromatizantes, antioxidantes ni conservantes.</p>
-	<p>Solo utilizamos ingredientes frescos que son beneficiosos para su salud (sin lactosa, sin sal y sin grasas saturadas) que harán las delicias de nuestras mascotas.</p>
-	<br><br>
-	<p>¡Contamos con obrador y tienda! Puedes visitarnos y ver en persona como elaboramos todos nuestros productos :)</p>
-	</div></div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<img src="http://ichef.bbci.co.uk/news/ws/660/amz/worldservice/live/assets/images/2015/11/27/151127162942_gato_624x351_thinkstock_nocredit.jpg" width="100%">
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6 texto">
+				<p>En <strong>Bites</strong> elaboramos nuestros productos para perros y gatos de manera artesanal y con <u>ingredientes naturales.</u></p><br>
+				<p><strong>Nuestro obrador está incluido en el Registro de Establecimientos e Intermediarios para el sector de la alimentación animal.</strong></p>
+				<p>No usamos aditivos, aromatizantes, antioxidantes ni conservantes.</p>
+				<p>Solo utilizamos ingredientes frescos que son beneficiosos para su salud (sin lactosa, sin sal y sin grasas saturadas) que harán las delicias de nuestras mascotas.</p>
+				<br>
+				<br>
+			<p>¡Contamos con obrador y tienda! Puedes visitarnos y ver en persona como elaboramos todos nuestros productos :)</p>
+			</div>
+		</div>
 	</section>
 	<footer class="footer">
 	  <div class="container">

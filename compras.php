@@ -1,25 +1,25 @@
 <?php
 	session_start();
 	include './conexion.php';
-	$arreglo=$_SESSION['carrito'];
+	$datos=$_SESSION['carrito'];
 	$numeroventa=0;
-	$re=mysqli_query($con,"select * from compras order by numeroventa DESC limit 1") or die(mysqli_error());
-	while ( $f=mysqli_fetch_array($re)){
-		$numeroventa=$f['numeroventa'];
+	$resultado=mysqli_query($con,"select * from compras order by numeroventa DESC limit 1") or die(mysqli_error());
+	while ( $fila=mysqli_fetch_array($resultado)){
+		$numeroventa=$fila['numeroventa'];
 	}
 	if($numeroventa==0){
 		$numeroventa=1;
 	}else{
 		$numeroventa++;
 	}
-	for ($i=0; $i < count($arreglo); $i++) { 
+	for ($i=0; $i < count($datos); $i++) { 
 		mysqli_query($con,"insert into compras (numeroventa, imagen, nombre, precio, cantidad, subtotal) values (
 			".$numeroventa.",
-			'".$arreglo[$i]['Imagen']."',
-			'".$arreglo[$i]['Nombre']."',
-			'".$arreglo[$i]['Precio']."',
-			'".$arreglo[$i]['Cantidad']."',
-			'".($arreglo[$i]['Precio']*$arreglo[$i]['Cantidad'])."'
+			'".$datos[$i]['Imagen']."',
+			'".$datos[$i]['Nombre']."',
+			'".$datos[$i]['Precio']."',
+			'".$datos[$i]['Cantidad']."',
+			'".($datos[$i]['Precio']*$datos[$i]['Cantidad'])."'
 			)")or die(mysqli_error());
 	}
 	unset($_SESSION['carrito']);

@@ -11,7 +11,7 @@ session_start();
 <html lang="es">
 <head>
 	<meta charset="utf-8"/>
-	<title>Bites</title>
+	<title>BITES</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
 	<link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -25,7 +25,9 @@ session_start();
 		.navbar.navbar-default{
 			margin-bottom: 0px;
 		}
-		
+		#userNav:hover {
+			background-color: #E95420;
+		}
 		section.admin{
 			padding: 0% 1%;
 			margin-bottom: 2%;
@@ -71,16 +73,33 @@ session_start();
 	    <div id="navbar" class="navbar-collapse collapse">
 	      <ul class="nav navbar-nav">
 	        <li><a href="inicio.html">Inicio</a></li>
-	        <li class="active"><a href="#">Admin</a></li>
-	        <li><a href="./admin/agregarproducto.php" >Productos</a></li>
-		    <!-- <li><a href="./admin/modificar.php">Modificar producto</a></li> -->
-		    <li><a href="registro.php">Agregar usuario</a></li>
-		    <li><a href="./registro/modificarU.php">Modificar usuario</a></li>
 	        <li><a href="index.php">Catálogo</a></li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="./login/cerrar.php">Salir</a></li>
-	        <li class="active"><a href="carrito.php"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+	        <?php
+			if (isset($_SESSION['Usuario'])) {
+				echo "<li><a href='' id='userNav'>".$_SESSION['Usuario'][0]['Usuario']."</a></li>";
+				if ($_SESSION['Usuario'][0]['Usuario'] == 'admin') {
+			?>
+					<li class='dropdown'>
+					  <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><span class='fa fa-cog'></span></a>
+					    <ul class='dropdown-menu' role='menu'>
+					      <li><a href='registro.php'>Usuarios</a></li>
+					      <li><a href='./admin/productos.php'>Productos</a></li>
+					      <li><a href='admin.php'>Pedidos</a></li>
+					    </ul>
+					</li>
+			<?php
+				} else {
+					echo"<li><a href='./login/panelU.php'><i class='fa fa-cog' aria-hidden='true'></i></a></li>";
+				}
+				echo "<li><a href='./login/cerrar.php'>Salir</a></li>";
+			}
+			else{
+				echo "<li><a href='registro.php'>Registro</a></li>";
+				echo "<li><a href='login.php'>Login</a></li>";
+			}
+        	?>
 	      </ul>
 	    </div><!--/.nav-collapse -->
 	  </div>
@@ -98,19 +117,19 @@ session_start();
 		</tr>	
 
 		<?php
-			$re=mysqli_query($con,"select * from compras")or die(mysqli_error($con));
+			$datos=mysqli_query($con,"select * from compras")or die(mysqli_error($con));
 			$numeroventa=0;
-			while ($f=mysqli_fetch_array($re)) {
-					if($numeroventa	!=$f['numeroventa']){
-						echo '<tr><td>Pedido nº: '.$f['numeroventa'].' </td></tr>';
+			while ($fila=mysqli_fetch_array($datos)) {
+					if($numeroventa	!=$fila['numeroventa']){
+						echo '<tr><td>Pedido nº: '.$fila['numeroventa'].' </td></tr>';
 					}
-					$numeroventa=$f['numeroventa'];
+					$numeroventa=$fila['numeroventa'];
 					echo '<tr>
-						<td><img src="./productos/'.$f['imagen'].'" width="100px" heigth="100px" /></td>
-						<td>'.$f['nombre'].'</td>
-						<td>'.$f['precio'].'</td>
-						<td>'.$f['cantidad'].'</td>
-						<td>'.$f['subtotal'].'</td>
+						<td><img src="./productos/'.$fila['imagen'].'" width="100px" heigth="100px" /></td>
+						<td>'.$fila['nombre'].'</td>
+						<td>'.$fila['precio'].'</td>
+						<td>'.$fila['cantidad'].'</td>
+						<td>'.$fila['subtotal'].'</td>
 					</tr>';
 			}
 		?>
